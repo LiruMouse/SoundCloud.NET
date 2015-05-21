@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoundCloud.NET.Authentication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,34 @@ namespace SoundCloud.NET
     /// </summary>
     public class SoundCloudManager
     {
+
+        #region Public Constructors
+
+        /// <summary>
+        /// Initialisiert einen neuen SoundCloudManager
+        /// </summary>
+        /// <param name="clientId">SoundCloud API Client ID</param>
+        public SoundCloudManager(string clientId)
+        {
+            // ClientId setzen
+            this.ClientId = clientId;
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// SoundCloud API Client ID
+        /// </summary>
+        public string ClientId { get; set; }
+
+        /// <summary>
+        /// OAuth Token Provider
+        /// </summary>
+        public ISoundCloudTokenProvider TokenProvider { get; set; }
+
+        #endregion Public Properties
 
     }
 }
