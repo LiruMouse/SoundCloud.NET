@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -46,6 +47,10 @@ namespace SoundCloud.NET.Http
             this.WebClient.Encoding = Encoding.UTF8;
             this.WebClient.Headers.Add(HttpRequestHeader.UserAgent, "SoundCloud.NET");
             this.WebClient.Proxy = null;
+
+            this.Resource = resource;
+
+            Trace.WriteLine("Request initialisiert auf Ressource " + resource);
         }
 
         /// <summary>
@@ -61,9 +66,11 @@ namespace SoundCloud.NET.Http
                 case ParameterType.ClientID:
                     this.QueryString["client_id"] = parameter;
                     break;
+
                 case ParameterType.OAuthToken:
                     this.QueryString["oauth_token"] = parameter;
                     break;
+
                 default:
                     break;
             }
@@ -88,6 +95,16 @@ namespace SoundCloud.NET.Http
         /// </summary>
         public WebClient WebClient { get; set; }
 
+        /// <summary>
+        /// Möglicherweise aufgetretener Fehler beim Ausführen des Requests
+        /// </summary>
+        public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Ausgabe des SoundCloud Servers
+        /// </summary>
+        public string Result { get; set; }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -106,26 +123,56 @@ namespace SoundCloud.NET.Http
         }
 
         /// <summary>
-        /// Führt den Request aus und liefert die Antwort als String zurück
+        /// Führt den Request aus und liefert zurück, ob der Request erfolgreich ausgeführt wurde
         /// </summary>
         /// <returns></returns>
-        public string Execute()
+        public bool Execute()
         {
-            return this.WebClient.DownloadString(this.Resource);
+            Trace.WriteLine("Führe Request auf Ressource '" + this.Resource + "' aus");
+
+            try
+            {
+                this.Result = this.WebClient.DownloadString(this.Resource);
+
+                this.Exception = null;
+
+                return !string.IsNullOrWhiteSpace(this.Result);
+            }
+            catch (Exception e)
+            {
+                this.Exception = e;
+
+                Trace.WriteLine(e.Message);
+
+                return false;
+            }
         }
 
         /// <summary>
-        /// Führt den Request aus und deserialisiert die Antwort in den angegebenen Typ
+        /// Deserialisiert die Antwort in den angegebenen Typ
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T ExecuteObject<T>()
+        public T DeserializeResult<T>()
         {
-            return JsonConvert.DeserializeObject<T>(this.Execute(), new JsonSerializerSettings()
+            Trace.WriteLine("Deserialisiere Result in Typ " + typeof(T).Name);
+
+            try
             {
-                MissingMemberHandling = MissingMemberHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore
-            });
+                return JsonConvert.DeserializeObject<T>(this.Result, new JsonSerializerSettings()
+                {
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore,
+                });
+            }
+            catch (Exception e)
+            {
+                this.Exception = e;
+
+                Trace.WriteLine(e.Message);
+
+                return default(T);
+            }
         }
 
         #endregion Public Methods
