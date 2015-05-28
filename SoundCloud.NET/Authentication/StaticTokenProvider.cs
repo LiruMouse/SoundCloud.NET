@@ -45,5 +45,16 @@ namespace SoundCloud.NET.Authentication
         }
 
         #endregion Public Methods
+
+        /// <summary>
+        /// Gibt an, ob ein Token zur Verfügung steht
+        /// </summary>
+        public bool TokenAvailable
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(this.Token);
+            }
+        }
     }
 }

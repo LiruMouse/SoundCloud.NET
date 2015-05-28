@@ -27,6 +27,7 @@ namespace SoundCloud.NET.Logging
         /// </summary>
         private Tracer()
         {
+            // Logging
             System.Diagnostics.Trace.AutoFlush = true;
             System.Diagnostics.Trace.Listeners.Add(this);
 

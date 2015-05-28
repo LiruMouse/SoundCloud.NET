@@ -50,6 +50,7 @@ namespace SoundCloud.NET.Http
 
             this.Resource = resource;
 
+            // Logging
             Trace.WriteLine("Request initialisiert auf Ressource " + resource);
         }
 
@@ -61,24 +62,17 @@ namespace SoundCloud.NET.Http
         /// <param name="parameter"></param>
         public Request(string resource, ParameterType type, string parameter) : this(resource)
         {
-            switch (type)
-            {
-                case ParameterType.ClientID:
-                    this.QueryString["client_id"] = parameter;
-                    break;
-
-                case ParameterType.OAuthToken:
-                    this.QueryString["oauth_token"] = parameter;
-                    break;
-
-                default:
-                    break;
-            }
+            this.SetAuth(type, parameter);
         }
 
         #endregion Public Constructors
 
         #region Public Properties
+
+        /// <summary>
+        /// Möglicherweise aufgetretener Fehler beim Ausführen des Requests
+        /// </summary>
+        public Exception Exception { get; set; }
 
         /// <summary>
         /// Auflistung der GET-Parameter
@@ -91,19 +85,14 @@ namespace SoundCloud.NET.Http
         public string Resource { get; set; }
 
         /// <summary>
-        /// Verwendeter WebClient
-        /// </summary>
-        public WebClient WebClient { get; set; }
-
-        /// <summary>
-        /// Möglicherweise aufgetretener Fehler beim Ausführen des Requests
-        /// </summary>
-        public Exception Exception { get; set; }
-
-        /// <summary>
         /// Ausgabe des SoundCloud Servers
         /// </summary>
         public string Result { get; set; }
+
+        /// <summary>
+        /// Verwendeter WebClient
+        /// </summary>
+        public WebClient WebClient { get; set; }
 
         #endregion Public Properties
 
@@ -123,38 +112,13 @@ namespace SoundCloud.NET.Http
         }
 
         /// <summary>
-        /// Führt den Request aus und liefert zurück, ob der Request erfolgreich ausgeführt wurde
-        /// </summary>
-        /// <returns></returns>
-        public bool Execute()
-        {
-            Trace.WriteLine("Führe Request auf Ressource '" + this.Resource + "' aus");
-
-            try
-            {
-                this.Result = this.WebClient.DownloadString(this.Resource);
-
-                this.Exception = null;
-
-                return !string.IsNullOrWhiteSpace(this.Result);
-            }
-            catch (Exception e)
-            {
-                this.Exception = e;
-
-                Trace.WriteLine(e.Message);
-
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Deserialisiert die Antwort in den angegebenen Typ
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T DeserializeResult<T>()
         {
+            // Logging
             Trace.WriteLine("Deserialisiere Result in Typ " + typeof(T).Name);
 
             try
@@ -169,13 +133,63 @@ namespace SoundCloud.NET.Http
             {
                 this.Exception = e;
 
+                // Logging
                 Trace.WriteLine(e.Message);
 
                 return default(T);
             }
         }
 
-        #endregion Public Methods
+        /// <summary>
+        /// Führt den Request aus und liefert zurück, ob der Request erfolgreich ausgeführt wurde
+        /// </summary>
+        /// <returns></returns>
+        public bool Execute()
+        {
+            // Logging
+            Trace.WriteLine("Führe Request auf Ressource '" + this.Resource + "' aus");
 
+            try
+            {
+                this.Result = this.WebClient.DownloadString(this.Resource);
+
+                this.Exception = null;
+
+                return !string.IsNullOrWhiteSpace(this.Result);
+            }
+            catch (Exception e)
+            {
+                this.Exception = e;
+
+                // Logging
+                Trace.WriteLine(e.Message);
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Setzt den Authentifizierungsparameter des Requests
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="parameter"></param>
+        public void SetAuth(ParameterType type, string parameter)
+        {
+            switch (type)
+            {
+                case ParameterType.ClientID:
+                    this.QueryString["client_id"] = parameter;
+                    break;
+
+                case ParameterType.OAuthToken:
+                    this.QueryString["oauth_token"] = parameter;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        #endregion Public Methods
     }
 }

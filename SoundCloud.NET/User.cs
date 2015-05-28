@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using SoundCloud.NET.Http;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +15,17 @@ namespace SoundCloud.NET
     public class User
     {
 
-        #region Internal Constructors
+        #region Private Constructors
 
         /// <summary>
-        /// Interner Konstruktor
+        /// Privater Konstruktor
         /// </summary>
         private User()
         {
 
         }
 
-        #endregion Internal Constructors
+        #endregion Private Constructors
 
         #region Public Properties
 
@@ -177,6 +179,47 @@ namespace SoundCloud.NET
         internal SoundCloudManager SoundCloudManager { get; set; }
 
         #endregion Internal Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Listet die Tracks des Nutzers auf
+        /// </summary>
+        /// <returns></returns>
+        public Track[] GetTracks()
+        {
+            // Logging
+            Trace.WriteLine("Frage Tracks von User '" + this.Id + "' an");
+
+            Request req = new Request(string.Format("/users/{0}/tracks", this.Id));
+
+            if (this.SoundCloudManager.TokenAvailable)
+            {
+                req.SetAuth(ParameterType.OAuthToken, this.SoundCloudManager.TokenProvider.GetToken());
+            }
+            else
+            {
+                req.SetAuth(ParameterType.ClientID, this.SoundCloudManager.ClientId);
+            }
+
+            if (req.Execute())
+            {
+                Track[] tracks = req.DeserializeResult<Track[]>();
+
+                foreach (Track track in tracks)
+                {
+                    track.SoundCloudManager = this.SoundCloudManager;
+                }
+
+                return tracks;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion Public Methods
 
     }
 }

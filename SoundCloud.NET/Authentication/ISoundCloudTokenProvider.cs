@@ -16,5 +16,10 @@ namespace SoundCloud.NET.Authentication
         /// </summary>
         /// <returns>SoundCloud OAuth Token</returns>
         string GetToken();
+
+        /// <summary>
+        /// Gibt an, ob ein Token zur Verfügung steht
+        /// </summary>
+        bool TokenAvailable { get; }
     }
 }
