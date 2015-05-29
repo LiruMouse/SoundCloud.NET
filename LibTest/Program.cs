@@ -23,8 +23,8 @@ namespace LibTest
                 Console.WriteLine(t.Title);
             }
 
-            //SoundCloudManager.write("http://api.soundcloud.com/playlists/109804597.json?client_id=YOUR_CLIENT_ID");
-            SoundCloudManager.write("http://api.soundcloud.com/tracks/139322451.json?client_id=YOUR_CLIENT_ID");
+            SoundCloudManager.write("http://api.soundcloud.com/playlists/109804597.json?client_id=YOUR_CLIENT_ID");
+            //SoundCloudManager.write("http://api.soundcloud.com/tracks/139322451.json?client_id=YOUR_CLIENT_ID");
 
             Track track = man.GetTrack("https://soundcloud.com/bloes-brothers/bloes-brothers-36-klingande");
             Console.WriteLine(track.Title);

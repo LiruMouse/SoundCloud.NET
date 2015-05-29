@@ -38,7 +38,7 @@ namespace SoundCloud.NET.Http
         /// Initialisiert einen API Request
         /// </summary>
         /// <param name="resource"></param>
-        public Request(string resource)
+        private Request(string resource)
         {
             // WebClient einrichten
             this.WebClient = new WebClient();
@@ -58,11 +58,18 @@ namespace SoundCloud.NET.Http
         /// Initialisiert einen API Request wahlweise mit ClientId oder OAuth-Token
         /// </summary>
         /// <param name="resource"></param>
-        /// <param name="type"></param>
-        /// <param name="parameter"></param>
-        public Request(string resource, ParameterType type, string parameter) : this(resource)
+        /// <param name="manager"></param>
+        public Request(string resource, SoundCloudManager manager) : this(resource)
         {
-            this.SetAuth(type, parameter);
+            // Authentifizierung festlegen
+            if (manager.TokenAvailable)
+            {
+                this.SetAuth(ParameterType.OAuthToken, manager.TokenProvider.GetToken());
+            }
+            else
+            {
+                this.SetAuth(ParameterType.ClientID, manager.ClientId);
+            }
         }
 
         #endregion Public Constructors

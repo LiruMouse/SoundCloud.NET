@@ -52,7 +52,7 @@ namespace SoundCloud.NET
         public int CommentCount { get; internal set; }
 
         /// <summary>
-        /// Erstelldatum des Tracks
+        /// Erstellzeitpunkt des Tracks
         /// </summary>
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; internal set; }
@@ -130,7 +130,7 @@ namespace SoundCloud.NET
         public string License { get; internal set; }
 
         /// <summary>
-        /// Eindeutiger Trackname
+        /// URL-Slug des Tracks
         /// </summary>
         [JsonProperty("permalink")]
         public string Permalink { get; internal set; }

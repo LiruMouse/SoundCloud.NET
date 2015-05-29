@@ -76,9 +76,78 @@ namespace SoundCloud.NET
         }
 
         /// <summary>
+        /// Holt Informationen über die angegebene Playlist
+        /// </summary>
+        /// <param name="id">Integer ID</param>
+        /// <returns></returns>
+        public Set GetPlaylist(int id)
+        {
+            // Logging
+            Trace.WriteLine("Frage Playlist '" + id + "' an");
+
+            // API Request vorbereiten
+            Request req = new Request(string.Format("/playlists/{0}", id), this);
+
+            // API Request ausführen
+            if (req.Execute())
+            {
+                // API Response deserialisieren
+                Set set = req.DeserializeResult<Set>();
+                set.SoundCloudManager = this;
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (Track t in set.Tracks)
+                {
+                    t.SoundCloudManager = this;
+                }
+
+                return set;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Holt Informationen über die angegebene Playlist anhand der Playlist-URL
+        /// </summary>
+        /// <param name="url">SoundCloud URL</param>
+        /// <returns></returns>
+        public Set GetPlaylist(string url)
+        {
+            // Logging
+            Trace.WriteLine("Frage Playlist über URL '" + url + "' an");
+
+            // API Request vorbereiten
+            Request req = new Request("/resolve", this);
+            req.AddParam("url", url);
+
+            // API Request ausführen
+            if (req.Execute())
+            {
+                // API Response deserialisieren
+                Set set = req.DeserializeResult<Set>();
+                set.SoundCloudManager = this;
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (Track t in set.Tracks)
+                {
+                    t.SoundCloudManager = this;
+                }
+
+                return set;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Holt Informationen über den angegebenen Track
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Integer ID</param>
         /// <returns></returns>
         public Track GetTrack(int id)
         {
@@ -86,7 +155,7 @@ namespace SoundCloud.NET
             Trace.WriteLine("Frage Track '" + id + "' an");
 
             // API Request vorbereiten
-            Request req = new Request(string.Format("/tracks/{0}", id), ParameterType.ClientID, this.ClientId);
+            Request req = new Request(string.Format("/tracks/{0}", id), this);
 
             // API Request ausführen
             if (req.Execute())
@@ -106,7 +175,7 @@ namespace SoundCloud.NET
         /// <summary>
         /// Holt Informationen über den angegebenen Track anhand der Track-URL
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">SoundCloud URL</param>
         /// <returns></returns>
         public Track GetTrack(string url)
         {
@@ -114,7 +183,7 @@ namespace SoundCloud.NET
             Trace.WriteLine("Frage Track über URL '" + url + "' an");
 
             // API Request vorbereiten
-            Request req = new Request("/resolve", ParameterType.ClientID, this.ClientId);
+            Request req = new Request("/resolve", this);
             req.AddParam("url", url);
 
             // API Request ausführen
@@ -135,7 +204,7 @@ namespace SoundCloud.NET
         /// <summary>
         /// Holt Informationen über den angegebenen Benutzer
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Integer ID</param>
         /// <returns></returns>
         public User GetUser(int id)
         {
@@ -143,7 +212,7 @@ namespace SoundCloud.NET
             Trace.WriteLine("Frage User '" + id + "' an");
 
             // API Request vorbereiten
-            Request req = new Request(string.Format("/users/{0}", id), ParameterType.ClientID, this.ClientId);
+            Request req = new Request(string.Format("/users/{0}", id), this);
 
             // API Request ausführen
             if (req.Execute())
@@ -163,7 +232,7 @@ namespace SoundCloud.NET
         /// <summary>
         /// Holt Informationen über den angegebenen Benutzer anhand der Benutzer-URL
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">SoundCloud URL</param>
         /// <returns></returns>
         public User GetUser(string url)
         {
@@ -171,7 +240,7 @@ namespace SoundCloud.NET
             Trace.WriteLine("Frage User über URL '" + url + "' an");
 
             // API Request vorbereiten
-            Request req = new Request("/resolve", ParameterType.ClientID, this.ClientId);
+            Request req = new Request("/resolve", this);
             req.AddParam("url", url);
 
             // API Request ausführen
@@ -190,6 +259,5 @@ namespace SoundCloud.NET
         }
 
         #endregion Public Methods
-
     }
 }

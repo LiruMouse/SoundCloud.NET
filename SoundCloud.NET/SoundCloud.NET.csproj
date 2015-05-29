@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
     <Compile Include="Authentication\ISoundCloudTokenProvider.cs" />
     <Compile Include="Authentication\StaticTokenProvider.cs" />
     <Compile Include="Http\Request.cs" />

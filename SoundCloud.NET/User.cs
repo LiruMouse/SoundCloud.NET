@@ -114,7 +114,7 @@ namespace SoundCloud.NET
         public bool Online { get; internal set; }
 
         /// <summary>
-        /// Eindeutiger Nutzername
+        /// URL-Slug des Benutzers
         /// </summary>
         [JsonProperty("permalink")]
         public string Permalink { get; internal set; }
@@ -191,27 +191,60 @@ namespace SoundCloud.NET
             // Logging
             Trace.WriteLine("Frage Tracks von User '" + this.Id + "' an");
 
-            Request req = new Request(string.Format("/users/{0}/tracks", this.Id));
+            // Request vorbereiten
+            Request req = new Request(string.Format("/users/{0}/tracks", this.Id), this.SoundCloudManager);
 
-            if (this.SoundCloudManager.TokenAvailable)
-            {
-                req.SetAuth(ParameterType.OAuthToken, this.SoundCloudManager.TokenProvider.GetToken());
-            }
-            else
-            {
-                req.SetAuth(ParameterType.ClientID, this.SoundCloudManager.ClientId);
-            }
-
+            // Request ausführen
             if (req.Execute())
             {
+                // Tracks deserialisieren
                 Track[] tracks = req.DeserializeResult<Track[]>();
 
+                // Verweis auf den SoundCloud Manager hinzufügen
                 foreach (Track track in tracks)
                 {
                     track.SoundCloudManager = this.SoundCloudManager;
                 }
 
                 return tracks;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Listet die Playlists des Nutzers auf
+        /// </summary>
+        /// <returns></returns>
+        public Set[] GetPlaylists()
+        {
+            // Logging
+            Trace.WriteLine("Frage Playlists von User '" + this.Id + "' an");
+
+            // Request vorbereiten
+            Request req = new Request(string.Format("/users/{0}/playlists", this.Id), this.SoundCloudManager);
+
+            // Request ausführen
+            if (req.Execute())
+            {
+                // Playlists deserialisieren
+                Set[] sets = req.DeserializeResult<Set[]>();
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (Set set in sets)
+                {
+                    set.SoundCloudManager = this.SoundCloudManager;
+
+                    // Verweis auf den SoundCloud Manager hinzufügen
+                    foreach (Track t in set.Tracks)
+                    {
+                        t.SoundCloudManager = this.SoundCloudManager;
+                    }
+                }
+
+                return sets;
             }
             else
             {
