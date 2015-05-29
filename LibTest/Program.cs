@@ -23,11 +23,38 @@ namespace LibTest
                 Console.WriteLine(t.Title);
             }
 
-            SoundCloudManager.write("http://api.soundcloud.com/playlists/109804597.json?client_id=YOUR_CLIENT_ID");
-            //SoundCloudManager.write("http://api.soundcloud.com/tracks/139322451.json?client_id=YOUR_CLIENT_ID");
-
             Track track = man.GetTrack("https://soundcloud.com/bloes-brothers/bloes-brothers-36-klingande");
             Console.WriteLine(track.Title);
+
+            Console.WriteLine("------------");
+
+            User test = man.GetUser("https://soundcloud.com/validworks");
+
+            foreach (Set set in test.GetPlaylists())
+            {
+                Console.WriteLine(set.Title);
+            }
+
+            Console.WriteLine("------------");
+
+            foreach (User user in test.GetFollowers())
+            {
+                Console.WriteLine(user.Username);
+            }
+
+            Console.WriteLine("------------");
+
+            foreach (User user in test.GetFollowings())
+            {
+                Console.WriteLine(user.Username);
+            }
+
+            Console.WriteLine("------------");
+
+            foreach (Track fav in test.GetFavorites())
+            {
+                Console.WriteLine(fav.Title);
+            }
 
             Console.ReadLine();
         }

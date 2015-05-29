@@ -37,7 +37,7 @@ namespace SoundCloud.NET
         /// Beats per minute
         /// </summary>
         [JsonProperty("bpm")]
-        public int BPM { get; internal set; }
+        public float BPM { get; internal set; }
 
         /// <summary>
         /// Gibt an, ob Kommentare abgegeben werden können

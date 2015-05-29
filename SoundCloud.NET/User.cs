@@ -252,6 +252,102 @@ namespace SoundCloud.NET
             }
         }
 
+        /// <summary>
+        /// Listet die Benutzer auf, denen der Benutzer folgt
+        /// </summary>
+        /// <returns></returns>
+        public User[] GetFollowings()
+        {
+            // Logging
+            Trace.WriteLine("Frage Followings von User '" + this.Id + "' an");
+
+            // Request vorbereiten
+            Request req = new Request(string.Format("/users/{0}/followings", this.Id), this.SoundCloudManager);
+
+            // Request ausführen
+            if (req.Execute())
+            {
+                // Benutzer deserialisieren
+                User[] users = req.DeserializeResult<User[]>();
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (User user in users)
+                {
+                    user.SoundCloudManager = this.SoundCloudManager;
+                }
+
+                return users;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Listet die Benutzer auf, denen der Benutzer folgt
+        /// </summary>
+        /// <returns></returns>
+        public User[] GetFollowers()
+        {
+            // Logging
+            Trace.WriteLine("Frage Followers von User '" + this.Id + "' an");
+
+            // Request vorbereiten
+            Request req = new Request(string.Format("/users/{0}/followers", this.Id), this.SoundCloudManager);
+
+            // Request ausführen
+            if (req.Execute())
+            {
+                // Benutzer deserialisieren
+                User[] users = req.DeserializeResult<User[]>();
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (User user in users)
+                {
+                    user.SoundCloudManager = this.SoundCloudManager;
+                }
+
+                return users;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Listet die Favoriten des Benutzers auf
+        /// </summary>
+        /// <returns></returns>
+        public Track[] GetFavorites()
+        {
+            // Logging
+            Trace.WriteLine("Frage Favorites von User '" + this.Id + "' an");
+
+            // Request vorbereiten
+            Request req = new Request(string.Format("/users/{0}/favorites", this.Id), this.SoundCloudManager);
+
+            // Request ausführen
+            if (req.Execute())
+            {
+                // Tracks deserialisieren
+                Track[] tracks = req.DeserializeResult<Track[]>();
+
+                // Verweis auf den SoundCloud Manager hinzufügen
+                foreach (Track track in tracks)
+                {
+                    track.SoundCloudManager = this.SoundCloudManager;
+                }
+
+                return tracks;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         #endregion Public Methods
 
     }
