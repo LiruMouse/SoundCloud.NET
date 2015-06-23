@@ -134,6 +134,7 @@ namespace SoundCloud.NET.Http
                 {
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore,
+                    Culture = System.Globalization.CultureInfo.InvariantCulture
                 });
             }
             catch (Exception e)
