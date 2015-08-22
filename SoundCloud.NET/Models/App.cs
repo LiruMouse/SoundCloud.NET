@@ -7,27 +7,49 @@ using System.Threading.Tasks;
 
 namespace SoundCloud.NET.Models
 {
+    /// <summary>
+    /// Represents a SoundCloud app
+    /// </summary>
     public class App : BaseModel
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        #region Public Properties
 
-        [JsonProperty("kind")]
-        public string Kind { get; set; }
+        /// <summary>
+        /// App creator
+        /// </summary>
+        [JsonProperty("creator")]
+        public string Creator { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("uri")]
-        public string Uri { get; set; }
-
-        [JsonProperty("permalink_url")]
-        public string PermalinkUrl { get; set; }
-
+        /// <summary>
+        /// App website
+        /// </summary>
         [JsonProperty("external_url")]
         public string ExternalUrl { get; set; }
 
-        [JsonProperty("creator")]
-        public string Creator { get; set; }
+        /// <summary>
+        /// Numeric app ID
+        /// </summary>
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        /// <summary>
+        /// App name
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// SoundCloud App URL
+        /// </summary>
+        [JsonProperty("permalink_url")]
+        public string PermalinkUrl { get; set; }
+
+        /// <summary>
+        /// SoundCloud API Resource URL
+        /// </summary>
+        [JsonProperty("uri")]
+        public string Uri { get; set; }
+
+        #endregion Public Properties
     }
 }

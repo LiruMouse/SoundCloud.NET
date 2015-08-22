@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SoundCloud.NET
 {
     /// <summary>
-    /// Stellt eine Schnittstelle zu SoundCloud bereit
+    /// Provides an interface to the SoundCloud API
     /// </summary>
     public class SoundCloudManager
     {
@@ -18,9 +18,9 @@ namespace SoundCloud.NET
         #region Public Constructors
 
         /// <summary>
-        /// Initialisiert einen neuen SoundCloud Manager
+        /// Creates a new instance of the SoundCloud Manager
         /// </summary>
-        /// <param name="clientId"></param>
+        /// <param name="clientId">Your client ID</param>
         public SoundCloudManager(string clientId)
         {
             // Eigenschaften zuweisen
@@ -44,7 +44,7 @@ namespace SoundCloud.NET
         #region Public Properties
 
         /// <summary>
-        /// Die verwendete Client ID
+        /// Client ID used by this manager
         /// </summary>
         public string ClientID { get; private set; }
 
@@ -53,16 +53,113 @@ namespace SoundCloud.NET
         #region Private Properties
 
         /// <summary>
-        /// Der verwendete RestClient
+        /// RestClient used by this manager
         /// </summary>
         private RestClient RestClient { get; set; }
 
         #endregion Private Properties
 
+        #region Public Methods
+
+        /// <summary>
+        /// Gets a SoundCloud app, identified by its permalink URL
+        /// </summary>
+        /// <param name="soundcloudUrl"></param>
+        /// <returns></returns>
+        public App GetApp(string soundcloudUrl)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud app, identified by its numeric ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public App GetApp(int id)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud playlist, identified by its permalink URL
+        /// </summary>
+        /// <param name="soundcloudUrl"></param>
+        /// <returns></returns>
+        public Playlist GetPlaylist(string soundcloudUrl)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud playlist, identified by its numeric ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Playlist GetPlaylist(int id)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud Track, identified by its permalink URL
+        /// </summary>
+        /// <param name="soundcloudUrl"></param>
+        /// <returns></returns>
+        public Track GetTrack(string soundcloudUrl)
+        {
+            // Request anlegen
+            RestRequest request = new RestRequest("resolve", Method.GET);
+
+            // Parameter setzen
+            request.AddParameter("url", soundcloudUrl.Trim());
+
+            // Request ausführen und Track liefern
+            return this.Execute<Track>(request);
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud Track, identified by its numeric ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Track GetTrack(int id)
+        {
+            // Request anlegen
+            RestRequest request = new RestRequest("tracks/{id}", Method.GET);
+
+            // Parameter setzen
+            request.AddUrlSegment("id", id.ToString());
+
+            // Request ausführen und Track liefern
+            return this.Execute<Track>(request);
+        }
+        /// <summary>
+        /// Gets a SoundCloud user, identified by its permalink URL
+        /// </summary>
+        /// <param name="soundcloudUrl"></param>
+        /// <returns></returns>
+        public User GetUser(string soundcloudUrl)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a SoundCloud user, identified by its numeric ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public User GetUser(int id)
+        {
+            return null;
+        }
+
+        #endregion Public Methods
+
         #region Internal Methods
 
         /// <summary>
-        /// Führt den Request aus und liefert ein einzelnes Objekt
+        /// Executes the request and serializes the result
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
@@ -93,7 +190,7 @@ namespace SoundCloud.NET
         }
 
         /// <summary>
-        /// Führt den Request aus und liefert eine Reihe von Objekten
+        /// Executes the request and serializes the result as a collection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
@@ -127,40 +224,6 @@ namespace SoundCloud.NET
         }
 
         #endregion Internal Methods
-
-        /// <summary>
-        /// Liefert einen SoundCloud Track, identifiziert durch seine SoundCloud URL
-        /// </summary>
-        /// <param name="soundcloudUrl"></param>
-        /// <returns></returns>
-        public Track GetTrack(string soundcloudUrl)
-        {
-            // Request anlegen
-            RestRequest request = new RestRequest("resolve", Method.GET);
-
-            // Parameter setzen
-            request.AddParameter("url", soundcloudUrl.Trim());
-
-            // Request ausführen und Track liefern
-            return this.Execute<Track>(request);
-        }
-
-        /// <summary>
-        /// Liefert einen SoundCloud Track, identifiziert durch seine numerische ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Track GetTrack(int id)
-        {
-            // Request anlegen
-            RestRequest request = new RestRequest("tracks/{id}", Method.GET);
-
-            // Parameter setzen
-            request.AddUrlSegment("id", id.ToString());
-
-            // Request ausführen und Track liefern
-            return this.Execute<Track>(request);
-        }
 
     }
 }
