@@ -68,7 +68,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public App GetApp(string soundcloudUrl)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("resolve", Method.GET);
+
+            // Parameter setzen
+            request.AddParameter("url", soundcloudUrl.Trim());
+
+            // Request ausführen und App liefern
+            return this.Execute<App>(request);
         }
 
         /// <summary>
@@ -78,7 +85,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public App GetApp(int id)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("apps/{id}", Method.GET);
+
+            // Parameter setzen
+            request.AddUrlSegment("id", id.ToString());
+
+            // Request ausführen und App liefern
+            return this.Execute<App>(request);
         }
 
         /// <summary>
@@ -88,7 +102,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Playlist GetPlaylist(string soundcloudUrl)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("resolve", Method.GET);
+
+            // Parameter setzen
+            request.AddParameter("url", soundcloudUrl.Trim());
+
+            // Request ausführen und Playlist liefern
+            return this.Execute<Playlist>(request);
         }
 
         /// <summary>
@@ -98,7 +119,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Playlist GetPlaylist(int id)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("playlists/{id}", Method.GET);
+
+            // Parameter setzen
+            request.AddUrlSegment("id", id.ToString());
+
+            // Request ausführen und Playlist liefern
+            return this.Execute<Playlist>(request);
         }
 
         /// <summary>
@@ -134,6 +162,7 @@ namespace SoundCloud.NET
             // Request ausführen und Track liefern
             return this.Execute<Track>(request);
         }
+
         /// <summary>
         /// Gets a SoundCloud user, identified by its permalink URL
         /// </summary>
@@ -141,7 +170,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public User GetUser(string soundcloudUrl)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("resolve", Method.GET);
+
+            // Parameter setzen
+            request.AddParameter("url", soundcloudUrl.Trim());
+
+            // Request ausführen und User liefern
+            return this.Execute<User>(request);
         }
 
         /// <summary>
@@ -151,7 +187,14 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public User GetUser(int id)
         {
-            return null;
+            // Request anlegen
+            RestRequest request = new RestRequest("users/{id}", Method.GET);
+
+            // Parameter setzen
+            request.AddUrlSegment("id", id.ToString());
+
+            // Request ausführen und User liefern
+            return this.Execute<User>(request);
         }
 
         #endregion Public Methods

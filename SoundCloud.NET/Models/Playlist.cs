@@ -10,7 +10,7 @@ namespace SoundCloud.NET.Models
     /// <summary>
     /// Represents a SoundCloud playlist (or "Set")
     /// </summary>
-    public class Playlist
+    public class Playlist : BaseModel
     {
         #region Public Properties
 
