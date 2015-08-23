@@ -68,14 +68,8 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public App GetApp(string soundcloudUrl)
         {
-            // Request anlegen
-            RestRequest request = new RestRequest("resolve", Method.GET);
-
-            // Parameter setzen
-            request.AddParameter("url", soundcloudUrl.Trim());
-
             // Request ausführen und App liefern
-            return this.Execute<App>(request);
+            return this.Resolve<App>(soundcloudUrl);
         }
 
         /// <summary>
@@ -102,14 +96,8 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Playlist GetPlaylist(string soundcloudUrl)
         {
-            // Request anlegen
-            RestRequest request = new RestRequest("resolve", Method.GET);
-
-            // Parameter setzen
-            request.AddParameter("url", soundcloudUrl.Trim());
-
             // Request ausführen und Playlist liefern
-            return this.Execute<Playlist>(request);
+            return this.Resolve<Playlist>(soundcloudUrl);
         }
 
         /// <summary>
@@ -136,14 +124,8 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Track GetTrack(string soundcloudUrl)
         {
-            // Request anlegen
-            RestRequest request = new RestRequest("resolve", Method.GET);
-
-            // Parameter setzen
-            request.AddParameter("url", soundcloudUrl.Trim());
-
             // Request ausführen und Track liefern
-            return this.Execute<Track>(request);
+            return this.Resolve<Track>(soundcloudUrl);
         }
 
         /// <summary>
@@ -170,14 +152,8 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public User GetUser(string soundcloudUrl)
         {
-            // Request anlegen
-            RestRequest request = new RestRequest("resolve", Method.GET);
-
-            // Parameter setzen
-            request.AddParameter("url", soundcloudUrl.Trim());
-
             // Request ausführen und User liefern
-            return this.Execute<User>(request);
+            return this.Resolve<User>(soundcloudUrl);
         }
 
         /// <summary>
@@ -264,6 +240,23 @@ namespace SoundCloud.NET
 
             // Model ausliefern
             return models;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="soundcloudUrl"></param>
+        /// <returns></returns>
+        internal T Resolve<T>(string soundcloudUrl) where T : BaseModel
+        {
+            // Request anlegen
+            RestRequest request = new RestRequest("resolve", Method.GET);
+
+            // Parameter setzen
+            request.AddParameter("url", soundcloudUrl.Trim());
+
+            // Request ausführen und Playlist liefern
+            return this.Execute<T>(request);
         }
 
         #endregion Internal Methods
