@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
@@ -8,8 +8,22 @@
     <owners>$author$</owners>
     <licenseUrl>https://valentingerlach.de:4443/valentin/SoundCloud.NET/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://valentingerlach.de:4443/valentin/SoundCloud.NET</projectUrl>
+    <iconUrl>http://files.valentingerlach.de/SoundCloud.NET/icons.002.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>C# SoundCloud Library
+
+I'm developing this library for one of my projects and like to share my work :)
+
+The library is under heavy development but it's stable. There are just some features missing.
+
+Documentation can be found on the project page.</description>
+    <summary>C# SoundCloud Library
+
+I'm developing this library for one of my projects and like to share my work :)
+
+The library is under heavy development but it's stable. There are just some features missing.
+
+Documentation can be found on the project page.</summary>
     <copyright>Copyright 2015</copyright>
     <tags>SoundCloud.NET SoundCloud API</tags>
 	<language>en-US</language>
