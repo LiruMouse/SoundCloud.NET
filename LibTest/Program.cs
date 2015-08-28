@@ -112,6 +112,24 @@ namespace LibTest
 
             #endregion
 
+            #region Search for a track
+
+            {
+                // Create a new SoundCloudManager
+                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+
+                // Search for a track
+                Track[] tracks = man.SearchTrack("Solace - Tom Day");
+
+                // Do something
+                foreach (Track track in tracks)
+                {
+                    Console.WriteLine(track.Title + "\t\t" + track.User.Username);
+                }
+            }
+
+            #endregion
+
             Console.ReadKey();
         }
     }

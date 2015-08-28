@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
+using SoundCloud.NET.Attributes;
 using SoundCloud.NET.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -149,6 +152,86 @@ namespace SoundCloud.NET
             return this.ResolveId<User>("users", id);
         }
 
+        /// <summary>
+        /// Search for an app by providing a set of parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public App[] SearchApp(SearchParameters parameters)
+        {
+            return this.Search<App>("apps", parameters);
+        }
+
+        /// <summary>
+        /// Search for an app by providing a search string
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public App[] SearchApp(string searchString)
+        {
+            return this.SearchApp(new SearchParameters(searchString));
+        }
+
+        /// <summary>
+        /// Search for a playlist by providing a set of parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public Playlist[] SearchPlaylist(SearchParameters parameters)
+        {
+            return this.Search<Playlist>("playlists", parameters);
+        }
+
+        /// <summary>
+        /// Search for a playlist by providing a search string
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public Playlist[] SearchPlaylist(string searchString)
+        {
+            return this.SearchPlaylist(new SearchParameters(searchString));
+        }
+
+        /// <summary>
+        /// Search for a track by providing a set of parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public Track[] SearchTrack(SearchParameters parameters)
+        {
+            return this.Search<Track>("tracks", parameters);
+        }
+
+        /// <summary>
+        /// Search for a track by providing a search string
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public Track[] SearchTrack(string searchString)
+        {
+            return this.SearchTrack(new SearchParameters(searchString));
+        }
+
+        /// <summary>
+        /// Search for an user by providing a set of parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public User[] SearchUser(SearchParameters parameters)
+        {
+            return this.Search<User>("users", parameters);
+        }
+
+        /// <summary>
+        /// Search for an user by providing a search string
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public User[] SearchUser(string searchString)
+        {
+            return this.SearchUser(new SearchParameters(searchString));
+        }
+
         #endregion Public Methods
 
         #region Internal Methods
@@ -251,10 +334,41 @@ namespace SoundCloud.NET
             // Parameter setzen
             request.AddParameter("url", soundcloudUrl.Trim());
 
-            // Request ausführen und Playlist liefern
+            // Request ausführen und Model liefern
             return this.Execute<T>(request);
         }
 
+        /// <summary>
+        /// Sucht nach einer API Ressource
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subresource"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        internal T[] Search<T>(string subresource, SearchParameters param) where T : BaseModel
+        {
+            // Request anlegen
+            RestRequest request = new RestRequest(subresource, Method.GET);
+
+            // Parameter lesen
+            foreach (PropertyInfo property in typeof(SearchParameters).GetProperties())
+            {
+                // Attribute lesen
+                foreach (UrlParameterProperty attr in property.GetCustomAttributes(typeof(UrlParameterProperty)))
+                {
+                    // Wenn Property gesetzt, zu Parametern hinzufügen
+                    if (property.GetValue(param) != null)
+                    {
+                        request.AddQueryParameter(attr.ParameterName, property.GetValue(param).ToString());
+                    }
+                }
+            }
+
+            // Request ausführen und Model liefern
+            return this.ExecuteCollection<T>(request);
+        }
+
         #endregion Internal Methods
+
     }
 }
