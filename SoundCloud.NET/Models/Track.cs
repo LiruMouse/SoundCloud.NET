@@ -200,7 +200,7 @@ namespace SoundCloud.NET.Models
         /// Release
         /// </summary>
         [JsonProperty("release")]
-        public DateTime Release { get; set; }
+        public string Release { get; set; }
 
         /// <summary>
         /// Day of release
