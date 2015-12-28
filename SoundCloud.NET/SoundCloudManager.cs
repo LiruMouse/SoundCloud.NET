@@ -19,7 +19,8 @@ namespace SoundCloud.NET
         /// Creates a new instance of the SoundCloud Manager
         /// </summary>
         /// <param name="clientId">Your client ID</param>
-        public SoundCloudManager(string clientId)
+        /// <param name="userAgent">Your user agent, if you have a unique one</param>
+        public SoundCloudManager(string clientId, string userAgent = "")
         {
             // Eigenschaften zuweisen
             ClientID = clientId;
@@ -27,7 +28,7 @@ namespace SoundCloud.NET
             // RestClient einrichten
             RestClient = new RestClient("https://api.soundcloud.com")
             {
-                UserAgent = "SoundCloud.NET (https://valentingerlach.de:4443/valentin/SoundCloud.NET)",
+                UserAgent =  $"{userAgent} SoundCloud.NET (https://valentingerlach.de:4443/valentin/SoundCloud.NET)".TrimStart(),
                 Timeout = 3000,
                 FollowRedirects = true,
                 Encoding = Encoding.UTF8
