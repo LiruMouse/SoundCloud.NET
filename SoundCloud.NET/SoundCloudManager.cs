@@ -2,13 +2,8 @@
 using RestSharp;
 using SoundCloud.NET.Attributes;
 using SoundCloud.NET.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SoundCloud.NET
 {
@@ -27,10 +22,10 @@ namespace SoundCloud.NET
         public SoundCloudManager(string clientId)
         {
             // Eigenschaften zuweisen
-            this.ClientID = clientId;
+            ClientID = clientId;
 
             // RestClient einrichten
-            this.RestClient = new RestClient("https://api.soundcloud.com")
+            RestClient = new RestClient("https://api.soundcloud.com")
             {
                 UserAgent = "SoundCloud.NET (https://valentingerlach.de:4443/valentin/SoundCloud.NET)",
                 Timeout = 3000,
@@ -39,7 +34,7 @@ namespace SoundCloud.NET
             };
 
             // Default Parameter setzen
-            this.RestClient.AddDefaultParameter("client_id", this.ClientID, ParameterType.QueryString);
+            RestClient.AddDefaultParameter("client_id", ClientID, ParameterType.QueryString);
         }
 
         #endregion Public Constructors
@@ -72,7 +67,7 @@ namespace SoundCloud.NET
         public App GetApp(string soundcloudUrl)
         {
             // Request ausführen und App liefern
-            return this.ResolveUrl<App>(soundcloudUrl);
+            return ResolveUrl<App>(soundcloudUrl);
         }
 
         /// <summary>
@@ -83,7 +78,7 @@ namespace SoundCloud.NET
         public App GetApp(int id)
         {
             // Request ausführen und App liefern
-            return this.ResolveId<App>("apps", id);
+            return ResolveId<App>("apps", id);
         }
 
         /// <summary>
@@ -94,7 +89,7 @@ namespace SoundCloud.NET
         public Playlist GetPlaylist(string soundcloudUrl)
         {
             // Request ausführen und Playlist liefern
-            return this.ResolveUrl<Playlist>(soundcloudUrl);
+            return ResolveUrl<Playlist>(soundcloudUrl);
         }
 
         /// <summary>
@@ -105,7 +100,7 @@ namespace SoundCloud.NET
         public Playlist GetPlaylist(int id)
         {
             // Request ausführen und Playlist liefern
-            return this.ResolveId<Playlist>("playlists", id);
+            return ResolveId<Playlist>("playlists", id);
         }
 
         /// <summary>
@@ -116,7 +111,7 @@ namespace SoundCloud.NET
         public Track GetTrack(string soundcloudUrl)
         {
             // Request ausführen und Track liefern
-            return this.ResolveUrl<Track>(soundcloudUrl);
+            return ResolveUrl<Track>(soundcloudUrl);
         }
 
         /// <summary>
@@ -127,7 +122,7 @@ namespace SoundCloud.NET
         public Track GetTrack(int id)
         {
             // Request ausführen und Track liefern
-            return this.ResolveId<Track>("tracks", id);
+            return ResolveId<Track>("tracks", id);
         }
 
         /// <summary>
@@ -138,7 +133,7 @@ namespace SoundCloud.NET
         public User GetUser(string soundcloudUrl)
         {
             // Request ausführen und User liefern
-            return this.ResolveUrl<User>(soundcloudUrl);
+            return ResolveUrl<User>(soundcloudUrl);
         }
 
         /// <summary>
@@ -149,7 +144,7 @@ namespace SoundCloud.NET
         public User GetUser(int id)
         {
             // Request ausführen und User liefern
-            return this.ResolveId<User>("users", id);
+            return ResolveId<User>("users", id);
         }
 
         /// <summary>
@@ -159,7 +154,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public App[] SearchApp(SearchParameters parameters)
         {
-            return this.Search<App>("apps", parameters);
+            return Search<App>("apps", parameters);
         }
 
         /// <summary>
@@ -169,7 +164,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public App[] SearchApp(string searchString)
         {
-            return this.SearchApp(new SearchParameters(searchString));
+            return SearchApp(new SearchParameters(searchString));
         }
 
         /// <summary>
@@ -179,7 +174,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Playlist[] SearchPlaylist(SearchParameters parameters)
         {
-            return this.Search<Playlist>("playlists", parameters);
+            return Search<Playlist>("playlists", parameters);
         }
 
         /// <summary>
@@ -189,7 +184,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Playlist[] SearchPlaylist(string searchString)
         {
-            return this.SearchPlaylist(new SearchParameters(searchString));
+            return SearchPlaylist(new SearchParameters(searchString));
         }
 
         /// <summary>
@@ -199,7 +194,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Track[] SearchTrack(SearchParameters parameters)
         {
-            return this.Search<Track>("tracks", parameters);
+            return Search<Track>("tracks", parameters);
         }
 
         /// <summary>
@@ -209,7 +204,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public Track[] SearchTrack(string searchString)
         {
-            return this.SearchTrack(new SearchParameters(searchString));
+            return SearchTrack(new SearchParameters(searchString));
         }
 
         /// <summary>
@@ -219,7 +214,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public User[] SearchUser(SearchParameters parameters)
         {
-            return this.Search<User>("users", parameters);
+            return Search<User>("users", parameters);
         }
 
         /// <summary>
@@ -229,7 +224,7 @@ namespace SoundCloud.NET
         /// <returns></returns>
         public User[] SearchUser(string searchString)
         {
-            return this.SearchUser(new SearchParameters(searchString));
+            return SearchUser(new SearchParameters(searchString));
         }
 
         #endregion Public Methods
@@ -245,7 +240,7 @@ namespace SoundCloud.NET
         internal T Execute<T>(RestRequest request) where T : BaseModel
         {
             // Request ausführen
-            IRestResponse response = this.RestClient.Execute(request);
+            IRestResponse response = RestClient.Execute(request);
 
             // Auf Fehler prüfen
             if (response.ErrorException != null)
@@ -276,7 +271,7 @@ namespace SoundCloud.NET
         internal T[] ExecuteCollection<T>(RestRequest request) where T : BaseModel
         {
             // Request ausführen
-            IRestResponse response = this.RestClient.Execute(request);
+            IRestResponse response = RestClient.Execute(request);
 
             // Auf Fehler prüfen
             if (response.ErrorException != null)
@@ -318,7 +313,7 @@ namespace SoundCloud.NET
             request.AddUrlSegment("subresource", subresource);
 
             // Request ausführen und Model liefern
-            return this.Execute<T>(request);
+            return Execute<T>(request);
         }
 
         /// <summary>
@@ -335,7 +330,7 @@ namespace SoundCloud.NET
             request.AddParameter("url", soundcloudUrl.Trim());
 
             // Request ausführen und Model liefern
-            return this.Execute<T>(request);
+            return Execute<T>(request);
         }
 
         /// <summary>
@@ -365,7 +360,7 @@ namespace SoundCloud.NET
             }
 
             // Request ausführen und Model liefern
-            return this.ExecuteCollection<T>(request);
+            return ExecuteCollection<T>(request);
         }
 
         #endregion Internal Methods

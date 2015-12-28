@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json;
-using SoundCloud.NET.Attributes;
+﻿using SoundCloud.NET.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SoundCloud.NET
 {
@@ -29,7 +24,7 @@ namespace SoundCloud.NET
         /// <param name="searchString"></param>
         public SearchParameters(string searchString)
         {
-            this.SearchString = searchString;
+            SearchString = searchString;
         }
 
         #endregion Public Constructors

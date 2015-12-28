@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SoundCloud.NET.Attributes
 {
@@ -23,7 +19,7 @@ namespace SoundCloud.NET.Attributes
         /// <param name="paramName"></param>
         public UrlParameterProperty(string paramName)
         {
-            this.ParameterName = paramName;
+            ParameterName = paramName;
         }
     }
 }
