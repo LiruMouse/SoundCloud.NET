@@ -5,5 +5,5 @@
         "RestSharp": "105.2.3"
     },
     "frameworks": { "net45": { } },
-    "runtimes": { "win": { } }
+    "runtimes": { "win": { }, "win-x86": { }, "win-x64": { } }
 }

@@ -56,6 +56,12 @@
     <Compile Include="SearchParameters.cs" />
     <Compile Include="SoundCloudManager.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="project.json" />
+    <Content Include="project.lock.json">
+      <DependentUpon>project.json</DependentUpon>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
