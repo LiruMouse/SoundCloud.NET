@@ -79,6 +79,14 @@ namespace SoundCloud.NET
         [UrlParameterProperty("license")]
         public string License { get; set; }
 
+        /// <summary>Allows multiple pages of results</summary>
+        [UrlParameterProperty("linked_partitioning")]
+        public int LinkedPartitioning { get { return 1; } }
+
+        /// <summary>Limit on results per page to return from search, max is 200</summary>
+        [UrlParameterProperty("limit")]
+        public int Limit { get; set; }
+
         /// <summary>
         /// General search string
         /// </summary>

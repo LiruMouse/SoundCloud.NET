@@ -152,30 +152,33 @@ namespace SoundCloud.NET
         /// Search for an app by providing a set of parameters
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        public App[] SearchApp(SearchParameters parameters)
+        public App[] SearchApp(SearchParameters parameters, int limit = 500)
         {
-            return Search<App>("apps", parameters);
+            return Search<App>("apps", parameters, limit);
         }
 
         /// <summary>
         /// Search for an app by providing a search string
         /// </summary>
         /// <param name="searchString"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        public App[] SearchApp(string searchString)
+        public App[] SearchApp(string searchString, int limit = 500)
         {
-            return SearchApp(new SearchParameters(searchString));
+            return SearchApp(new SearchParameters(searchString), limit);
         }
 
         /// <summary>
         /// Search for a playlist by providing a set of parameters
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        public Playlist[] SearchPlaylist(SearchParameters parameters)
+        public Playlist[] SearchPlaylist(SearchParameters parameters, int limit = 500)
         {
-            return Search<Playlist>("playlists", parameters);
+            return Search<Playlist>("playlists", parameters, limit);
         }
 
         /// <summary>
@@ -192,10 +195,11 @@ namespace SoundCloud.NET
         /// Search for a track by providing a set of parameters
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        public Track[] SearchTrack(SearchParameters parameters)
+        public Track[] SearchTrack(SearchParameters parameters, int limit = 500)
         {
-            return Search<Track>("tracks", parameters);
+            return Search<Track>("tracks", parameters, limit);
         }
 
         /// <summary>
@@ -212,10 +216,11 @@ namespace SoundCloud.NET
         /// Search for an user by providing a set of parameters
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        public User[] SearchUser(SearchParameters parameters)
+        public User[] SearchUser(SearchParameters parameters, int limit = 500)
         {
-            return Search<User>("users", parameters);
+            return Search<User>("users", parameters, limit);
         }
 
         /// <summary>
@@ -268,24 +273,31 @@ namespace SoundCloud.NET
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        internal T[] ExecuteCollection<T>(RestRequest request) where T : BaseModel
+        internal T[] ExecuteCollection<T>(RestRequest request, int limit) where T : BaseModel
         {
-            // Request ausführen
-            IRestResponse response = RestClient.Execute(request);
-
-            // Auf Fehler prüfen
-            if (response.ErrorException != null)
+            var models = new System.Collections.Generic.List<T>();
+            while (request != null && models.Count < limit)
             {
-                throw response.ErrorException;
+                // Request ausführen
+                IRestResponse response = RestClient.Execute(request);
+
+                // Auf Fehler prüfen
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
+
+                // Deserialisieren
+                var result = JsonConvert.DeserializeObject<SearchResults<T>>(response.Content, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                });
+                models.AddRange(result.Results);
+
+                // Continue to the next page until there isn't one.
+                request = result.NextPage != null ? new RestRequest(result.NextPage) : null;
             }
-
-            // Deserialisieren
-            T[] models = JsonConvert.DeserializeObject<T[]>(response.Content, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore
-            });
 
             // Verweise setzen
             foreach (BaseModel model in models)
@@ -294,7 +306,7 @@ namespace SoundCloud.NET
             }
 
             // Model ausliefern
-            return models;
+            return models.ToArray();
         }
 
         /// <summary>
@@ -340,8 +352,9 @@ namespace SoundCloud.NET
         /// <typeparam name="T"></typeparam>
         /// <param name="subresource"></param>
         /// <param name="param"></param>
+        /// <param name="limit">Limit results, prevent endless operation</param>
         /// <returns></returns>
-        internal T[] Search<T>(string subresource, SearchParameters param) where T : BaseModel
+        internal T[] Search<T>(string subresource, SearchParameters param, int limit) where T : BaseModel
         {
             // Request anlegen
             RestRequest request = new RestRequest(subresource, Method.GET);
@@ -361,7 +374,7 @@ namespace SoundCloud.NET
             }
 
             // Request ausführen und Model liefern
-            return ExecuteCollection<T>(request);
+            return ExecuteCollection<T>(request, limit);
         }
 
         #endregion Internal Methods

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\UrlParameterProperty.cs" />
+    <Compile Include="SearchResults.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Playlist.cs" />
