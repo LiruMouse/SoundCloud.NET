@@ -83,9 +83,10 @@ namespace SoundCloud.NET
         [UrlParameterProperty("linked_partitioning")]
         public int LinkedPartitioning { get { return 1; } }
 
-        /// <summary>Limit on results per page to return from search, max is 200</summary>
+        private int limit = 200;
+        /// <summary>Limit on results per page to return from search. Clamps between 1 and 200, inclusive.</summary>
         [UrlParameterProperty("limit")]
-        public int Limit { get; set; }
+        public int Limit { get => limit; set => limit = Math.Max(1, Math.Min(200, value)); }
 
         /// <summary>
         /// General search string
