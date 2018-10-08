@@ -6,13 +6,14 @@ namespace LibTest
 {
     class Program
     {
+        static SoundCloudManager Manager() => new SoundCloudManager(Environment.GetCommandLineArgs()[1]); // Pass your soundcloud client id as the first commandline argument.
         static void Main(string[] args)
         {
             #region Get track by ID
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get a track
                 Track track = man.GetTrack(187426021);
@@ -29,7 +30,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get a track
                 Track track = man.GetTrack("https://soundcloud.com/exgftheband/wearethehearts");
@@ -46,7 +47,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get a playlist
                 Playlist playlist = man.GetPlaylist(130316479);
@@ -63,7 +64,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get a playlist
                 Playlist playlist = man.GetPlaylist("https://soundcloud.com/songsthatbelong/sets/volume-ii");
@@ -80,7 +81,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get an user
                 User user = man.GetUser(70692);
@@ -96,7 +97,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Get an user
                 User user = man.GetUser("https://soundcloud.com/rac");
@@ -112,7 +113,7 @@ namespace LibTest
 
             {
                 // Create a new SoundCloudManager
-                SoundCloudManager man = new SoundCloudManager("YOUR_CLIENT_ID");
+                var man = Manager();
 
                 // Search for a track
                 Track[] tracks = man.SearchTrack("Solace - Tom Day");
